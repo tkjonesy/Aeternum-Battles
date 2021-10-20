@@ -97,4 +97,14 @@ class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         profile = self.get_object()
         return self.request.user == profile.user
+
+
+class Leaderboard(View):
+    def get(self, request, *args, **kwargs):
+        users = UserProfile.objects.all().order_by('-points')[:50]
+
+        context = {
+            'users': users,
+        }
+        return render(request, 'social/leaderboard.html', context)
 # Create your views here.

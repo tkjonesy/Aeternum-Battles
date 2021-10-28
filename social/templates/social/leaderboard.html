@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center mt-5">
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-3 col-sm-6" style="margin-left: 50px;">
             <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
         </div>
     </div>
@@ -12,7 +12,7 @@
     {% for user in users %}
     <div class="row justify-content-center mt-2">
         <div class="col-md-4 col-sm-11 border-bottom position-relative">
-            <p><strong>{{ user.user }}</strong></p>
+            <a href="{% url 'profile' pk=user.pk %}"><strong>{{ user.user }}</strong></a>
         </div>
         <div class="col-sm-1 border-bottom">
             <i class="fas fa-gem" style="color: blue;">{{ user.points }}</i>

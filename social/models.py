@@ -19,9 +19,18 @@ class UserProfile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     picture = models.ImageField(upload_to='uploads/profile_pictures', default='uploads/profile_pictures/defaultprofile.png', blank=False)
     points = models.PositiveIntegerField(default=0, verbose_name='points')
+    wins = models.PositiveIntegerField(default=0, verbose_name='wins')
+    losses = models.PositiveIntegerField(default=0, verbose_name='losses')
 
     def modify_points(self, added_points):
         self.points += added_points
+        self.save()
+
+    def modify_record(self, win):
+        if win:
+            self.wins += 1
+        elif not win:
+            self.losses += 1
         self.save()
 
 

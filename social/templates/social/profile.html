@@ -21,7 +21,6 @@
                                     <a href="{% url 'profile-edit' profile.pk %}" style="color: #333"><i class="far fa-edit"></i></a>
                                 {% endif %}
                             </span>
-
                         </h3>
                         <table style="border: 1px solid black;">
                                 <tr style="border: 1px solid black;">
@@ -40,17 +39,39 @@
                     {% if profile.bio %}
                         <p>{{ profile.bio }}</p>
                     {% endif %}
+                    {% if request.user != user and user not in request.user.friends.all %}
+                    <a href="{% url 'add-friend' user.pk %}" class="btn btn-primary">Add Friend</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="col-md-3 col-sm-6 mt-3 mx-auto">
+        <h4 class="text-center">Friend Requests</h4>
+    </div>
+
+    {% for friend_request in all_friend_requests %}
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4 col-sm-12 border-bottom">
+            <h6><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ friend_request.sender }}</a> {{ friend_request.timestamp }}</h6>
+            <a href="{% url 'accept-request' friend_request.pk %}"> Accept</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="col-md-3 col-sm-6 mt-3 mx-auto">
+        <h4 class="text-center">Posts</h4>
+    </div>
+
     {% for post in posts %}
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8 col-sm-12 border-bottom position-relative">
-            <p><strong>{{ post.author }}</strong> {{ post.created_on }}</p>
-            <p>{{ post.body }}</p>
-            <a href="{% url 'post-detail' post.pk %}" class="stretched-link"></a>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8 col-sm-12 border-bottom">
+            <p><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a> {{ post.created_on }}</p>
+            <div class="position-relative">
+                <p>{{ post.body }}</p>
+                <a href="{% url 'post-detail' post.pk %}" class="stretched-link"></a>
+            </div>
         </div>
     </div>
     {% endfor %}

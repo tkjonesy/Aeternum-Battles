@@ -1,8 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views import View
-from .models import Post, UserProfile
+from .models import Post, UserProfile, FriendRequest
 from .forms import PostForm
 from django.views.generic.edit import UpdateView, DeleteView
 
@@ -85,6 +86,26 @@ class ProfileView(View):
         return render(request, 'social/profile.html', context)
 
 
+def send_request(request, pk):
+    sender = request.user
+    receiver = UserProfile.objects.get(pk=pk)
+    friend_request, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
+    if created:
+        return HttpResponse('Friend Request Sent')
+    else:
+        return HttpResponse('A Friend Request Was Already Sent')
+
+
+def accept_request(request, pk):
+    friend_request = FriendRequest.objects.get(pk=pk)
+    user1 = request.user
+    user2 = friend_request.sender
+    user1.friends.add(user2)
+    user2.friends.add(user1)
+    friend_request.delete()
+    return HttpResponse('Friend Request Accepted')
+
+
 class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = UserProfile
     fields = ['name', 'bio', 'picture']
@@ -101,7 +122,7 @@ class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class Leaderboard(View):
     def get(self, request, *args, **kwargs):
-        users = UserProfile.objects.all().order_by('-points')[:50]
+        users = list(UserProfile.objects.order_by('-points')[:50])
 
         context = {
             'users': users,

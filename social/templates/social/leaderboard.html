@@ -4,20 +4,29 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center mt-5">
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-3 col-sm-6 text-center">
             <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
         </div>
     </div>
-
-    {% for user in users %}
-    <div class="row justify-content-center mt-2">
-        <div class="col-md-4 col-sm-11 border-bottom position-relative">
-            <p><strong>{{ user.user }}</strong></p>
-        </div>
-        <div class="col-sm-1 border-bottom">
-            <i class="fas fa-gem" style="color: blue;">{{ user.points }}</i>
-        </div>
+    <div class="row justify-content-center">
+        <ol class="list-group list-group-numbered col-md-5 col-sm-11 mt-4">
+            {% for user in users %}
+                <li class="list-group-item">
+                        <a style="text-decoration: none;" class="text-primary" href="{% url 'profile' user.user.profile.pk %}">{{ user.user }}</a>
+                        <i class="fas fa-gem" style="color: blue; float: right;"> {{ user.points }}</i>
+                </li>
+            {% endfor %}
+        </ol>
     </div>
-    {% endfor %}
+<!--    {% for user in users %}-->
+<!--        <div class="row justify-content-center mt-2">-->
+<!--            <div class="col-md-4 col-sm-auto border-bottom position-relative">-->
+<!--                <p><strong>{{ index }}. {{ user.user }}</strong></p>-->
+<!--            </div>-->
+<!--            <div class="col-sm-1 border-bottom">-->
+<!--                <i class="fas fa-gem" style="color: blue;"> {{ user.points }}</i>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    {% endfor %}-->
 </div>
 {% endblock content %}

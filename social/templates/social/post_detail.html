@@ -9,7 +9,7 @@
     </div>
     <div class="row justify-content-center mt-3">
         <div class="col-md-5 col-sm-12 border-bottom">
-            <p><strong>{{ post.author }}</strong> {{ post.created_on }}
+            <p><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a> {{ post.created_on }}
                 {% if request.user == post.author %}
                     <a href="{% url 'post-edit' post.pk %}" style="color: #333;"><i class="fas fa-edit"></i></a>
                     <a href="{% url 'post-delete' post.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>

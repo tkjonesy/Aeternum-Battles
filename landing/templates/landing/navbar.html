@@ -22,7 +22,7 @@
       {% if user.is_authenticated %}
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-user"></i></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" style="margin-left: -95px!important">
             <li><a class="dropdown-item" href="{% url 'profile' request.user.profile.pk %}">Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
             <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign Out</a></li>

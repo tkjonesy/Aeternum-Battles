@@ -25,6 +25,12 @@ class UserProfile(models.Model):
         self.points += added_points
         self.save()
 
+    def get_friends(self):
+        return self.friends.all()
+
+    def get_friends_no(self):
+        return self.friends.all().count()
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -38,13 +44,11 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class FriendRequest(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='receiver')
     is_active = models.BooleanField(blank=True, null=False, default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    # def __str__(self):
-    #     return self.sender.user
     #
     # def accept(self):
     #     receiver_friend_list = FriendList.objects.get(user=self.receiver)

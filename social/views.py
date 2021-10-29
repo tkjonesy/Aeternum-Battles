@@ -77,17 +77,19 @@ class ProfileView(View):
         profile = UserProfile.objects.get(pk=pk)
         user = profile.user
         posts = Post.objects.filter(author=user).order_by('-created_on')
+        friend_requests = FriendRequest.objects.filter(receiver=user.profile).order_by('-timestamp')
 
         context = {
             'user': user,
             'profile': profile,
             'posts': posts,
+            'friend_requests': friend_requests,
         }
         return render(request, 'social/profile.html', context)
 
 
 def send_request(request, pk):
-    sender = request.user
+    sender = request.user.profile
     receiver = UserProfile.objects.get(pk=pk)
     friend_request, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
     if created:

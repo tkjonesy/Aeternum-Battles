@@ -23,7 +23,6 @@ class UserProfile(models.Model):
     losses = models.PositiveIntegerField(default=0, verbose_name='losses')
     friends = models.ManyToManyField(User, blank=True, default=None, related_name='friends')
 
-
     def modify_points(self, added_points):
         self.points += added_points
         self.save()
@@ -54,6 +53,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class FriendRequest(models.Model):
+    objects = models.Manager()
     sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='receiver')
     is_active = models.BooleanField(blank=True, null=False, default=True)

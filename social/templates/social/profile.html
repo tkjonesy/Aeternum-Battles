@@ -14,15 +14,27 @@
                     <img src="{{ profile.picture.url }}" class="rounded-circle" width="100"/>
                 </div>
                 <div class="col-md-8 mt-2">
-                    <h3>{{ user.username }}
-                        <span>
-                            {% if request.user == user %}
-                                <a href="{% url 'profile-edit' profile.pk %}" style="color: #333"><i class="far fa-edit"></i></a>
-                            {% endif %}
-                        </span>
-                    </h3>
+                    <div style="display:flex; flex-flow:row; ">
+                        <h3>{{ user.username }}
+                            <span>
+                                {% if request.user == user %}
+                                    <a href="{% url 'profile-edit' profile.pk %}" style="color: #333"><i class="far fa-edit"></i></a>
+                                {% endif %}
+                            </span>
+                        </h3>
+                        <table style="border: 1px solid black;">
+                                <tr style="border: 1px solid black;">
+                                    <th style="border: 1px solid black;">wins</th>
+                                    <th style="border: 1px solid black;">losses</th>
+                                </tr>
+                                <tr style="border: 1px solid black;">
+                                    <td style="border: 1px solid black;">{{ profile.wins }}</td>
+                                    <td style="border: 1px solid black;">{{ profile.losses }}</td>
+                                </tr>
+                        </table>
+                    </div>
+                    <i class="fas fa-gem" style="color: blue;">{{ profile.points }}</i>
 
-                    <i class="fas fa-gem" style="color: blue;"> {{ profile.points }}</i>
 
                     {% if profile.bio %}
                         <p>{{ profile.bio }}</p>

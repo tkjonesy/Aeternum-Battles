@@ -51,15 +51,13 @@
         <div class="col-md-3 col-sm-6 mt-3 mx-auto">
             <h4 class="text-center">Friend Requests</h4>
         </div>
-        {{ friend_requests }}
-        {% for req in request.friend_requests %}
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-4 col-sm-12 border-bottom">
-                <p>eye</p>
-<!--                <h6><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' friend_request.sender.profile.pk %}">@{{ friend_request.sender }}</a> {{ friend_request.timestamp }}</h6>-->
-<!--                <a href="{% url 'accept-request' friend_request.pk %}"> Accept</a>-->
+        {% for friend_request in friend_requests %}
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-4 col-sm-12 border-bottom">
+                    <h6><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' friend_request.sender.pk %}">@{{ friend_request.sender.user }}</a> {{ friend_request.timestamp }}</h6>
+                    <a href="{% url 'accept-request' friend_request.pk %}"> Accept</a>
+                </div>
             </div>
-        </div>
         {% endfor %}
     {% endif %}
 

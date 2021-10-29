@@ -102,9 +102,9 @@ def send_request(request, pk):
 def accept_request(request, pk):
     friend_request = FriendRequest.objects.get(pk=pk)
     user1 = request.user
-    user2 = friend_request.sender
-    user1.friends.add(user2)
-    user2.friends.add(user1)
+    user2 = friend_request.sender.user
+    user1.profile.friends.add(user2)
+    user2.profile.friends.add(user1)
     friend_request.delete()
     return HttpResponse('Friend Request Accepted')
 

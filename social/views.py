@@ -77,7 +77,8 @@ class ProfileView(View):
         profile = UserProfile.objects.get(pk=pk)
         user = profile.user
         posts = Post.objects.filter(author=user).order_by('-created_on')
-        friend_requests = FriendRequest.objects.filter(receiver=user.profile).order_by('-timestamp')
+        # friend_requests = FriendRequest.objects.filter(receiver=profile).order_by('-timestamp')
+        friend_requests = FriendRequest.objects.all()
 
         context = {
             'user': user,
@@ -101,9 +102,9 @@ def send_request(request, pk):
 def accept_request(request, pk):
     friend_request = FriendRequest.objects.get(pk=pk)
     user1 = request.user
-    user2 = friend_request.sender
-    user1.friends.add(user2)
-    user2.friends.add(user1)
+    user2 = friend_request.sender.user
+    user1.profile.friends.add(user2)
+    user2.profile.friends.add(user1)
     friend_request.delete()
     return HttpResponse('Friend Request Accepted')
 

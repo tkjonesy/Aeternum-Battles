@@ -14,7 +14,9 @@ class Post(models.Model):
 
 class UserProfile(models.Model):
     objects = models.Manager()
+    # Unchangeable username
     user = models.OneToOneField(User, primary_key=True, verbose_name='user', related_name='profile', on_delete=models.CASCADE)
+    # Name can be changed by user
     name = models.CharField(max_length=30, blank=True, null=True)
     bio = models.TextField(max_length=500, blank=True)
     picture = models.ImageField(upload_to='uploads/profile_pictures', default='uploads/profile_pictures/defaultprofile.png', blank=False)

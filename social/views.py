@@ -1,6 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views import View
 from .models import Post, UserProfile, FriendRequest
@@ -78,7 +78,6 @@ class ProfileView(View):
         user = profile.user
         posts = Post.objects.filter(author=user).order_by('-created_on')
         friend_requests = FriendRequest.objects.filter(receiver=profile).order_by('-timestamp')
-        # friend_requests = FriendRequest.objects.all()
 
         context = {
             'user': user,
@@ -94,9 +93,11 @@ def send_request(request, pk):
     receiver = UserProfile.objects.get(pk=pk)
     friend_request, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
     if created:
-        return HttpResponse('Friend Request Sent')
+        messages.success(request, 'Friend Request Sent!')
+        return redirect('profile', pk=receiver.pk)
     else:
-        return HttpResponse('A Friend Request Was Already Sent')
+        messages.error(request, 'Friend Request Already Sent')
+        return redirect('profile', pk=receiver.pk)
 
 
 def accept_request(request, pk):
@@ -106,7 +107,8 @@ def accept_request(request, pk):
     user1.profile.friends.add(user2)
     user2.profile.friends.add(user1)
     friend_request.delete()
-    return HttpResponse('Friend Request Accepted')
+    messages.success(request, 'You Are Now Friends!')
+    return redirect('profile', pk=user1.profile.pk)
 
 
 class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

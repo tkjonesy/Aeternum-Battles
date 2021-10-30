@@ -1,80 +1,113 @@
 {% extends 'landing/base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row  mt-5">
-        <div class="col-md-3 col-sm-6">
-            <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
-        </div>
-    </div>
-    <div class=" d-flex justify-content-center">
-        <div class="card shadow-sm w-75 mt-5">
-            <div class="row no-gutters">
-                <div class="col-auto m-2">
-                    <img src="{{ profile.picture.url }}" class="rounded-circle" width="100"/>
-                </div>
-                <div class="col-md-8 mt-2">
-                    <div style="display:flex; flex-flow:row; ">
-                        <h3>{{ user.username }}
-                            <span>
-                                {% if request.user == user %}
-                                    <a href="{% url 'profile-edit' profile.pk %}" style="color: #333"><i class="far fa-edit"></i></a>
-                                {% endif %}
-                            </span>
-                        </h3>
-                        <table style="border: 1px solid black;">
-                                <tr style="border: 1px solid black;">
-                                    <th style="border: 1px solid black;">wins</th>
-                                    <th style="border: 1px solid black;">losses</th>
-                                </tr>
-                                <tr style="border: 1px solid black;">
-                                    <td style="border: 1px solid black;">{{ profile.wins }}</td>
-                                    <td style="border: 1px solid black;">{{ profile.losses }}</td>
-                                </tr>
-                        </table>
+    <script>
+        function FadeOut() {
+            var element = document.getElementById("fadeout");
+            var op = 1;  // initial opacity
+            var timer = setInterval(function () {
+                if (op <= .1){
+                    clearInterval(timer);
+                    element.style.display = 'none';
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op -= 1;
+            }, 2000);
+        }
+    </script>
+    <div class="container">
+        {% if messages %}
+            <div class="row justify-content-center" id="fadeout">
+                <script>FadeOut()</script>
+            {% for msg in messages %}
+                {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="alert alert-success col-md-6 col-sm-6" role="alert">
+                        <div class="text-center">{{ msg }}</div>
                     </div>
-                    <i class="fas fa-gem" style="color: blue;"> {{ profile.points }}</i>
+                {% endif %}
 
-
-                    {% if profile.bio %}
-                        <p>{{ profile.bio }}</p>
-                    {% endif %}
-                    <p>Friends: {{ profile.get_friends_no }}</p>
-                    {% if request.user != user and user not in user.profile.friends.all %}
-                    <a href="{% url 'add-friend' user.pk %}" class="btn btn-primary mb-2">Add Friend</a>
-                    {% endif %}
+                {% if msg.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="alert alert-warning col-md-6 col-sm-6" role="alert">
+                      <div class="text-center">{{ msg }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <div class="row  mt-5">
+            <div class="col-md-3 col-sm-6">
+                <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
+            </div>
+        </div>
+        <div class=" d-flex justify-content-center">
+            <div class="card shadow-sm w-75 mt-5">
+                <div class="row no-gutters">
+                    <div class="col-auto m-2">
+                        <img src="{{ profile.picture.url }}" class="rounded-circle" width="100"/>
+                    </div>
+                    <div class="col-md-8 mt-2">
+                        <div style="display:flex; flex-flow:row; ">
+                            <h3>{{ user.username }}
+                                <span>
+                                    {% if request.user == user %}
+                                        <a href="{% url 'profile-edit' profile.pk %}" style="color: #333"><i class="far fa-edit"></i></a>
+                                    {% endif %}
+                                </span>
+                            </h3>
+                            <table style="border: 1px solid black;">
+                                    <tr style="border: 1px solid black;">
+                                        <th style="border: 1px solid black;">wins</th>
+                                        <th style="border: 1px solid black;">losses</th>
+                                    </tr>
+                                    <tr style="border: 1px solid black;">
+                                        <td style="border: 1px solid black;">{{ profile.wins }}</td>
+                                        <td style="border: 1px solid black;">{{ profile.losses }}</td>
+                                    </tr>
+                            </table>
+                        </div>
+                      
+                      
+                        <i class="fas fa-gem" style="color: blue;"> {{ profile.points }}</i>
+                        {% if profile.bio %}
+                            <p>{{ profile.bio }}</p>
+                        {% endif %}
+                        <p>Friends: {{ profile.get_friends_no }}</p>
+                        {% if request.user != user and user not in request.user.profile.friends.all %}
+                        <a href="{% url 'add-friend' user.pk %}" class="btn btn-primary mb-2">Add Friend</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    {% if request.user == user %}
+        {% if request.user == user %}
+            <div class="col-md-3 col-sm-6 mt-3 mx-auto">
+                <h4 class="text-center">Friend Requests</h4>
+            </div>
+            {% for friend_request in friend_requests %}
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-4 col-sm-12 border-bottom">
+                        <h6><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' friend_request.sender.pk %}">@{{ friend_request.sender.user }}</a> {{ friend_request.timestamp }}</h6>
+                        <a href="{% url 'accept-request' friend_request.pk %}"> Accept</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <div class="col-md-3 col-sm-6 mt-3 mx-auto">
-            <h4 class="text-center">Friend Requests</h4>
+            <h4 class="text-center">Posts</h4>
         </div>
-        {% for friend_request in friend_requests %}
-            <div class="row justify-content-center mt-4">
-                <div class="col-md-4 col-sm-12 border-bottom">
-                    <h6><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' friend_request.sender.pk %}">@{{ friend_request.sender.user }}</a> {{ friend_request.timestamp }}</h6>
-                    <a href="{% url 'accept-request' friend_request.pk %}"> Accept</a>
+
+        {% for post in posts %}
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8 col-sm-12 border-bottom">
+                <p><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a> {{ post.created_on }}</p>
+                <div class="position-relative">
+                    <p>{{ post.body }}</p>
+                    <a href="{% url 'post-detail' post.pk %}" class="stretched-link"></a>
                 </div>
             </div>
-        {% endfor %}
-    {% endif %}
-
-    <div class="col-md-3 col-sm-6 mt-3 mx-auto">
-        <h4 class="text-center">Posts</h4>
-    </div>
-
-    {% for post in posts %}
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-8 col-sm-12 border-bottom">
-            <p><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a> {{ post.created_on }}</p>
-            <div class="position-relative">
-                <p>{{ post.body }}</p>
-                <a href="{% url 'post-detail' post.pk %}" class="stretched-link"></a>
-            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock content %}

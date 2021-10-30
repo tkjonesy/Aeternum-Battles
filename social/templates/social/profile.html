@@ -1,10 +1,25 @@
 {% extends 'landing/base.html' %}
 
 {% block content %}
-
+    <script>
+        function FadeOut() {
+            var element = document.getElementById("fadeout");
+            var op = 1;  // initial opacity
+            var timer = setInterval(function () {
+                if (op <= .1){
+                    clearInterval(timer);
+                    element.style.display = 'none';
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op -= 1;
+            }, 2000);
+        }
+    </script>
     <div class="container">
         {% if messages %}
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" id="fadeout">
+                <script>FadeOut()</script>
             {% for msg in messages %}
                 {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
                     <div class="alert alert-success col-md-6 col-sm-6" role="alert">

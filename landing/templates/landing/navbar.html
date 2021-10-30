@@ -20,10 +20,18 @@
         </div>
       </form>
       {% if user.is_authenticated %}
+
         <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-dark" onclick="profileDropdownMargin()" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="fas fa-user"></i></a>
+          <a class="nav-link dropdown-toggle text-dark" onclick="profileDropdownMargin()" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+            <img id="profile_picture" src="{{ user.profile.picture.url }}" width="30" height="30" class="rounded-circle">
+            {% if friend_requests %}
+              <i class="fas fa-bell nav-item" id="notif_bell" style="color: red; z-index: 2; position: fixed; margin-bottom: 18px; margin-left: -40px"></i>
+            {% endif %}
+          </a>
           <ul class="dropdown-menu" id="dropdown">
-            <li><a class="dropdown-item" href="{% url 'profile' request.user.profile.pk %}">Profile</a></li>
+            <li>
+              <a class="dropdown-item" href="{% url 'profile' request.user.profile.pk %}">Profile {% if friend_requests %}<i class="fas fa-bell nav-item" id="notif_bell1" style="color: red; "> </i>{% endif %}</a>
+            </li>
             <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
             <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign Out</a></li>
           </ul>

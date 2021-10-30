@@ -77,8 +77,8 @@ class ProfileView(View):
         profile = UserProfile.objects.get(pk=pk)
         user = profile.user
         posts = Post.objects.filter(author=user).order_by('-created_on')
-        # friend_requests = FriendRequest.objects.filter(receiver=profile).order_by('-timestamp')
-        friend_requests = FriendRequest.objects.all()
+        friend_requests = FriendRequest.objects.filter(receiver=profile).order_by('-timestamp')
+        # friend_requests = FriendRequest.objects.all()
 
         context = {
             'user': user,

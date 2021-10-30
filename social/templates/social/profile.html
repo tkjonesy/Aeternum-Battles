@@ -40,7 +40,7 @@
                         <p>{{ profile.bio }}</p>
                     {% endif %}
                     <p>Friends: {{ profile.get_friends_no }}</p>
-                    {% if request.user != user and user not in request.user.friends.all %}
+                    {% if request.user != user and user not in user.profile.friends.all %}
                     <a href="{% url 'add-friend' user.pk %}" class="btn btn-primary mb-2">Add Friend</a>
                     {% endif %}
                 </div>

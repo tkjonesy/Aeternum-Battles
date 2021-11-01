@@ -6,17 +6,18 @@
        {% else %}
        href="{% url 'index' %}"
        {% endif %}
-    ><i class="fas fa-khanda fa-lg" style="margin-right: 7px;"></i>Aeternum Battles</a>
+    ><i class="fas fa-khanda fa-lg brand-spacing"></i>Aeternum Battles</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       </ul>
-      <form class="d-flex">
+      <form method="GET" action="{% url 'profile-search' %}" class="d-flex">
         <div class="input-group">
           <span class="input-group-text" id="basic-addon1">@</span>
-          <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="query" value="{{ request.GET.query }}">
+          <button class="remove-default-btn" type="submit"><i class="fas fa-search"></i> </button>
         </div>
       </form>
       {% if user.is_authenticated %}
@@ -30,7 +31,7 @@
           </a>
           <ul class="dropdown-menu" id="dropdown">
             <li>
-              <a class="dropdown-item" href="{% url 'profile' request.user.profile.pk %}">Profile {% if has_friend_requests %}<i class="fas fa-bell nav-item" id="notif_bell1" style="color: red; "> </i>{% endif %}</a>
+              <a class="dropdown-item" href="{% url 'profile' request.user.profile.pk %}">Profile {% if has_friend_requests %}<i class="fas fa-bell nav-item color-red" id="notif_bell1"> </i>{% endif %}</a>
             </li>
             <li><a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a></li>
             <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign Out</a></li>
@@ -40,16 +41,4 @@
     </div>
   </div>
 </nav>
-<!-- >=992 px non collapsed version-->
-<script>
 
-  function profileDropdownMargin() {
-    if (document.getElementById('navbar').clientWidth < 992) {
-      document.getElementById('dropdown').style.marginLeft='0px'
-    }
-    else {
-      document.getElementById('dropdown').style.marginLeft='-95px'
-    }
-  }
-
-</script>

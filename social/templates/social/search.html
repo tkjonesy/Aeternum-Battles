@@ -1,0 +1,26 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-3 col-sm-6 text-center">
+                <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
+            </div>
+        </div>
+        {% for profile in profile_list %}
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-5 col-sm-12 border-bottom position-relative">
+                <div class="d-flex gap-2">
+                    <a class="mr-2" href="{% url 'profile' profile.pk %}">
+                        <img class="rounded-circle" height="50" width="50" src="{{ profile.picture.url }}"/>
+                    </a>
+                    <p class="post-text">
+                        <a class="text-primary remove-link-decoration" href="{% url 'profile' profile.pk %}">@{{ profile.user }}</a>
+                    </p>
+                </div>
+                <p>Friends: {{ profile.get_friends_no }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+.brand-spacing {
+    margin-right: 7px;
+}
+
+.remove-default-btn {
+    border: none;
+    background-color:
+    transparent;
+    box-shadow: none;
+}
+
+.bell-overlay {
+    color: red;
+    z-index: 2;
+    position: fixed;
+    margin-bottom: 18px;
+    margin-left: -40px
+}
+
+.color-red {
+    color: red;
+}
+
+.leaderboard-points {
+    float: right;
+}
+
+.remove-link-decoration {
+    text-decoration: none;
+}
+
+.edit-color {
+    color: #333;
+}
+
+.post-text {
+    padding-top: .5rem;
+}

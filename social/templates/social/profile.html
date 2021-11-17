@@ -20,8 +20,8 @@
             {% endfor %}
             </div>
         {% endif %}
-        <div class="row  mt-5">
-            <div class="col-md-3 col-sm-6">
+        <div class="row  mt-5 justify-content-center">
+            <div class="col-md-3 col-sm-6 text-center">
                 <a href="{% url 'post-list' %}" class="btn btn-primary">Available Challengers</a>
             </div>
         </div>
@@ -52,11 +52,11 @@
                             </table>
                         </div>
                       
-                        <i class="fas fa-gem text-primary"> {{ profile.points }}</i>
+                        <i class="fas fa-gem color-blue"> {{ profile.points }}</i>
                         {% if profile.bio %}
                             <p>{{ profile.bio }}</p>
                         {% endif %}
-                        <p>Friends: {{ profile.get_friends_no }}</p>
+                        <a href="{% url 'friend-list' profile.pk %}" class="remove-link-decoration"><p>Friends: {{ profile.get_friends_no }}</p></a>
                         {% if request.user != user and user not in request.user.profile.friends.all %}
                         <a href="{% url 'add-friend' user.pk %}" class="btn btn-primary mb-2">Add Friend</a>
                         {% endif %}

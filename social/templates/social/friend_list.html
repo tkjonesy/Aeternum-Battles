@@ -1,0 +1,28 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row  mt-5 justify-content-center">
+            <div class="col-md-3 col-sm-6 text-center">
+                <a href="{% url 'profile' profile.pk %}" class="btn btn-primary">Back to Profile</a>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-5 col-sm-12">
+                <h3>{{ profile.user.username }}'s Friends:</h3>
+            </div>
+        </div>
+        {% for friend in friends %}
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-5 col-sm-12 position-relative my-3">
+                    <div class="d-flex flex-row gap-2">
+                        <a href="{% url 'profile' friend.profile.pk %}">
+                            <img class="rounded-circle" height="50" width="50" src="{{ friend.profile.picture.url }}"/>
+                        </a>
+                        <a href="{% url 'profile' friend.profile.pk %}" class="remove-link-decoration"><h5 class="mt-3">@{{ friend.username }}</h5></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

@@ -147,4 +147,18 @@ class UserSearch(View):
 
         return render(request, 'social/search.html', context)
 
+
+class Friendlist(View):
+    def get(self, request, pk, *args, **kwargs):
+        profile = UserProfile.objects.get(pk=pk)
+        friends = profile.friends.all()
+
+        context = {
+            'profile': profile,
+            'friends': friends,
+        }
+
+        return render(request, 'social/friend_list.html', context)
+
+
 # Create your views here.

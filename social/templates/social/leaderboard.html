@@ -13,7 +13,7 @@
             {% for user in users %}
                 <li class="list-group-item">
                         <a class="text-primary remove-link-decoration" href="{% url 'profile' user.user.profile.pk %}">{{ user.user }}</a>
-                        <i class="fas fa-gem leaderboard-points text-primary"> {{ user.points }}</i>
+                        <i class="fas fa-gem leaderboard-points"> {{ user.points }}</i>
                 </li>
             {% endfor %}
         </ol>

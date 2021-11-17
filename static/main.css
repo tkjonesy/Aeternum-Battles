@@ -21,7 +21,12 @@
     color: red;
 }
 
+.color-blue {
+    color: blue;
+}
+
 .leaderboard-points {
+    color: blue;
     float: right;
 }
 

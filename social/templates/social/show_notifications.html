@@ -1,0 +1,27 @@
+{% if notifications %}
+    <div class="dropdown">
+        <span class="badge bg-danger notification-badge mb-1" onclick="showNotifications()">{{ notifications.count }}</span>
+        <div class="dropdown-content mt-3 d-none" id="notification-container">
+            {% for notification in notifications %}
+                {% if notification.notification_type == 1 %}
+                    <div class="dropdown-item-parent">
+                        <a href="{% url 'friend-notification' notification.pk notification.to_user.profile.pk %}">@{{ notification.from_user }} Sent a Friend Request</a>
+                        <span class="dropdown-item-close" onclick="removeNotification(`{% url 'remove-notification' notification.pk %}`, `{{ request.path }}`)">&times;</span>
+                    </div>
+                {% if notification.notification_type == 2 %}
+                    <div class="dropdown-item-parent">
+                        <a href="#">@{{ notification.from_user }} Sent a Message</a>
+                        <span class="dropdown-item-close" onclick="removeNotification(`{% url 'remove-notification' notification.pk %}`, `{{ request.path }}`)">&times;</span>
+                    </div>
+                {% if notification.notification_type == 3 %}
+                    <div class="dropdown-item-parent">
+                        <a href="#">@{{ notification.from_user }} Challenged You</a>
+                        <span class="dropdown-item-close" onclick="removeNotification(`{% url 'remove-notification' notification.pk %}`, `{{ request.path }}`)">&times;</span>
+                    </div>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.http import HttpResponse
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views import View
-from .models import Post, UserProfile, FriendRequest
+from .models import Post, UserProfile, FriendRequest, Notifications
 from .forms import PostForm
 from django.views.generic.edit import UpdateView, DeleteView
 
@@ -95,6 +96,7 @@ def send_request(request, pk):
     friend_request, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
     if created:
         messages.success(request, 'Friend Request Sent!')
+        notification = Notifications.objects.create(notification_type=1, from_user=request.user, to_user=receiver.user)
         return redirect('profile', pk=receiver.pk)
     else:
         messages.error(request, 'Friend Request Already Sent')
@@ -160,5 +162,25 @@ class Friendlist(View):
 
         return render(request, 'social/friend_list.html', context)
 
+
+class FriendNotification(View):
+    def get(self, request, notification_pk, to_user_pk, *args, **kwargs):
+        notification = Notifications.objects.get(pk=notification_pk)
+        profile = UserProfile.objects.get(pk=to_user_pk)
+
+        notification.user_has_seen = True
+        notification.save()
+
+        return redirect('profile', pk=to_user_pk)
+
+
+class RemoveNotification(View):
+    def delete(self, request, notification_pk, *args, **kwargs):
+        notification = Notifications.objects.get(pk=notification_pk)
+
+        notification.user_has_seen = True
+        notification.save()
+
+        return HttpResponse('Success', content_type='text/plain')
 
 # Create your views here.
